@@ -40,6 +40,7 @@
             trbLineWidth = new TrackBar();
             btnOpenFile = new Button();
             btnSaveFile = new Button();
+            panelCanvas = new Panel();
             picCanvas = new PictureBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -168,12 +169,22 @@
             btnSaveFile.Text = "저장";
             btnSaveFile.UseVisualStyleBackColor = false;
             // 
+            // panelCanvas
+            // 
+            panelCanvas.AutoScroll = true;
+            panelCanvas.Location = new Point(75, 219);
+            panelCanvas.Name = "panelCanvas";
+            panelCanvas.Size = new Size(1094, 487);
+            panelCanvas.TabIndex = 10;
+            panelCanvas.Controls.Add(picCanvas);
+            // 
             // picCanvas
             // 
             picCanvas.BackColor = Color.White;
-            picCanvas.Location = new Point(75, 219);
+            picCanvas.Location = new Point(0, 0);
             picCanvas.Name = "picCanvas";
             picCanvas.Size = new Size(1094, 487);
+            picCanvas.SizeMode = PictureBoxSizeMode.StretchImage;
             picCanvas.TabIndex = 9;
             picCanvas.TabStop = false;
             // 
@@ -182,7 +193,7 @@
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1256, 739);
-            Controls.Add(picCanvas);
+            Controls.Add(panelCanvas);
             Controls.Add(btnSaveFile);
             Controls.Add(btnOpenFile);
             Controls.Add(groupBox3);
@@ -214,6 +225,7 @@
         private TrackBar trbLineWidth;
         private Button btnOpenFile;
         private Button btnSaveFile;
+        private Panel panelCanvas;
         private PictureBox picCanvas;
     }
 }

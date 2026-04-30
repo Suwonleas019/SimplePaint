@@ -22,6 +22,44 @@ namespace SimplePaint
         private ToolType currentTool = ToolType.Line;  // 현재 선택된 도형
         private Color currentColor = Color.Black;      // 현재 색상
         private int currentLineWidth = 2;              // 현재 선 두께
+        private float zoomFactor = 1.0f;               // 확대/축소 배율
+
+        private Point GetActualPoint(Point apparentPoint)
+        {
+            return new Point((int)(apparentPoint.X / zoomFactor), (int)(apparentPoint.Y / zoomFactor));
+        }
+
+        private Point GetApparentPoint(Point actualPoint)
+        {
+            return new Point((int)(actualPoint.X * zoomFactor), (int)(actualPoint.Y * zoomFactor));
+        }
+
+        private void Zoom(float factor)
+        {
+            zoomFactor *= factor;
+            if (zoomFactor < 0.1f) zoomFactor = 0.1f;
+            if (zoomFactor > 10.0f) zoomFactor = 10.0f;
+            if (canvasBitmap != null)
+            {
+                picCanvas.Width = (int)(canvasBitmap.Width * zoomFactor);
+                picCanvas.Height = (int)(canvasBitmap.Height * zoomFactor);
+            }
+        }
+
+        private void Form1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (ModifierKeys == Keys.Control)
+            {
+                if (e.Delta > 0) Zoom(1.1f);
+                else Zoom(0.9f);
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Add || e.KeyCode == Keys.Oemplus) Zoom(1.1f);
+            else if (e.KeyCode == Keys.Subtract || e.KeyCode == Keys.OemMinus) Zoom(0.9f);
+        }
 
 
 
@@ -62,16 +100,23 @@ namespace SimplePaint
 
             // 파일 저장 버튼 이벤트 연결
             btnSaveFile.Click += btnSaveFile_Click;
+
+            // 파일 열기 및 줌 기능 연결
+            btnOpenFile.Click += btnOpenFile_Click;
+            this.MouseWheel += Form1_MouseWheel;
+            this.KeyPreview = true;
+            this.KeyDown += Form1_KeyDown;
         }
         private void PicCanvas_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button != MouseButtons.Left) return;
             isDrawing = true;             // 드래그 시작
-            startPoint = e.Location;      // 시작점 저장
+            startPoint = GetActualPoint(e.Location);      // 시작점 저장
         }
         private void PicCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             if (!isDrawing) return;       // 그림 그리기와 상관 없는 마우스 움직임은 무시
-            endPoint = e.Location;        // 현재 위치 갱신
+            endPoint = GetActualPoint(e.Location);        // 현재 위치 갱신
                                           // picCanvas를 다시 그려라 (Paint 이벤트를 발생시킨다)
             picCanvas.Invalidate();       // 화면 다시 그리기 (미리보기)
         }
@@ -79,7 +124,7 @@ namespace SimplePaint
         {
             if (!isDrawing) return;     // 그림 그리기와 상관 없는 마우스 움직임은 무시
             isDrawing = false;          // 드래그 종료
-            endPoint = e.Location;
+            endPoint = GetActualPoint(e.Location);
             // 실제 비트맵에 도형 그리기 (확정)
             using (Pen pen = new Pen(currentColor, currentLineWidth))
             {
@@ -90,11 +135,14 @@ namespace SimplePaint
         private void PicCanvas_Paint(object sender, PaintEventArgs e)
         {
             if (!isDrawing) return;
+            Point apparentStart = GetApparentPoint(startPoint);
+            Point apparentEnd = GetApparentPoint(endPoint);
+
             // 점선 펜 (미리보기용)
-            using (Pen previewPen = new Pen(currentColor, currentLineWidth))
+            using (Pen previewPen = new Pen(currentColor, currentLineWidth * zoomFactor))
             {
                 previewPen.DashStyle = DashStyle.Dash;
-                DrawShape(e.Graphics, previewPen, startPoint, endPoint);
+                DrawShape(e.Graphics, previewPen, apparentStart, apparentEnd);
             }
         }
 
@@ -179,6 +227,25 @@ namespace SimplePaint
                     }
 
                     canvasBitmap.Save(saveFileDialog.FileName, format);
+                }
+            }
+        }
+
+        private void btnOpenFile_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Image Files|*.png;*.jpg;*.bmp;*.jpeg|All Files|*.*";
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    Image loadedImage = Image.FromFile(ofd.FileName);
+                    zoomFactor = 1.0f;
+
+                    canvasBitmap = new Bitmap(loadedImage);
+                    canvasGraphics = Graphics.FromImage(canvasBitmap);
+
+                    picCanvas.Image = canvasBitmap;
+                    picCanvas.Size = canvasBitmap.Size;
                 }
             }
         }
