@@ -35,17 +35,17 @@
             btnRectangle = new Button();
             btnLine = new Button();
             groupBox2 = new GroupBox();
-            cmdColor = new ComboBox();
+            cmbColor = new ComboBox();
             groupBox3 = new GroupBox();
             trbLineWidth = new TrackBar();
             btnOpenFile = new Button();
             btnSaveFile = new Button();
-            pictureBox1 = new PictureBox();
+            picCanvas = new PictureBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trbLineWidth).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picCanvas).BeginInit();
             SuspendLayout();
             // 
             // lblAppname
@@ -112,7 +112,7 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(cmdColor);
+            groupBox2.Controls.Add(cmbColor);
             groupBox2.Location = new Point(480, 88);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(167, 125);
@@ -120,14 +120,14 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "색 선택";
             // 
-            // cmdColor
+            // cmbColor
             // 
-            cmdColor.FormattingEnabled = true;
-            cmdColor.Items.AddRange(new object[] { "Black  검정", "Red    빨강", "Blue   파랑", "Green 녹색" });
-            cmdColor.Location = new Point(6, 40);
-            cmdColor.Name = "cmdColor";
-            cmdColor.Size = new Size(151, 28);
-            cmdColor.TabIndex = 0;
+            cmbColor.FormattingEnabled = true;
+            cmbColor.Items.AddRange(new object[] { "Black  검정", "Red    빨강", "Blue   파랑", "Green 녹색" });
+            cmbColor.Location = new Point(6, 40);
+            cmbColor.Name = "cmbColor";
+            cmbColor.Size = new Size(151, 28);
+            cmbColor.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -168,21 +168,21 @@
             btnSaveFile.Text = "저장";
             btnSaveFile.UseVisualStyleBackColor = false;
             // 
-            // pictureBox1
+            // picCanvas
             // 
-            pictureBox1.BackColor = Color.White;
-            pictureBox1.Location = new Point(75, 219);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(1094, 469);
-            pictureBox1.TabIndex = 9;
-            pictureBox1.TabStop = false;
+            picCanvas.BackColor = Color.White;
+            picCanvas.Location = new Point(75, 219);
+            picCanvas.Name = "picCanvas";
+            picCanvas.Size = new Size(1094, 487);
+            picCanvas.TabIndex = 9;
+            picCanvas.TabStop = false;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1256, 739);
-            Controls.Add(pictureBox1);
+            Controls.Add(picCanvas);
             Controls.Add(btnSaveFile);
             Controls.Add(btnOpenFile);
             Controls.Add(groupBox3);
@@ -196,7 +196,7 @@
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)trbLineWidth).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picCanvas).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -209,11 +209,11 @@
         private Button btnRectangle;
         private Button btnLine;
         private GroupBox groupBox2;
-        private ComboBox cmdColor;
+        private ComboBox cmbColor;
         private GroupBox groupBox3;
         private TrackBar trbLineWidth;
         private Button btnOpenFile;
         private Button btnSaveFile;
-        private PictureBox pictureBox1;
+        private PictureBox picCanvas;
     }
 }
